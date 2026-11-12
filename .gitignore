@@ -1,8 +1,18 @@
+# Data and Model artifacts
 data/
-*.csv
+models/
 *.pt
-
-
+*.pth
+*.csv
 *.png
 
-models/
+# Python & Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
