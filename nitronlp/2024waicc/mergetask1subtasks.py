@@ -2,7 +2,7 @@ import pandas as pd
 
 # 1. Load both files
 df_t1 = pd.read_csv("submission_task1_1.csv")
-df_t2 = pd.read_csv("submission_task1_2.csv")
+df_t2 = pd.read_csv("submission_task1_2_newversion.csv")
 
 # 2. Extract only subtaskID == 1 from the first file and subtaskID == 2 from the second
 sub1 = df_t1[df_t1["subtaskID"] == 1][["subtaskID", "datapointID", "answer"]].copy()
