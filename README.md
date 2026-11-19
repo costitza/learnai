@@ -4,7 +4,7 @@ A collection of deep learning experiments, NLP hackathon pipelines, AI security 
 
 ---
 
-## 🛠️ Core Libraries & Tech Stack
+## Core Libraries & Tech Stack
 
 | Category | Libraries / Tools | Used For |
 |---|---|---|
@@ -16,7 +16,7 @@ A collection of deep learning experiments, NLP hackathon pipelines, AI security 
 
 ---
 
-## 🚀 Projects
+## Projects
 
 ### 1. Nitro NLP Hackathon (`nitronlp/`)
 Competition pipelines and training experiments built for the **Nitro NLP Hackathons** (WAICC 2024 & 2025).
@@ -67,7 +67,7 @@ Fundamental PyTorch implementations from scratch:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 .
