@@ -1,124 +1,114 @@
 # learnai
 
-A hands-on collection of deep learning implementations, AI security attacks, and research experiments.
-
-This repository covers:
-1. **Research Project:** Extracting Deterministic Finite Automata (DFAs) from Recurrent Neural Networks using Angluin's $L^*$ active learning algorithm (presented as research work at my faculty).
-2. **AI Security & Trustworthy AI:** Dataset inference attacks against vision models (ResNet18) built for the **[CISPA European Championship in Trustworthy AI](https://cispa.de/en/cispa-hackathon-championship-stockholm)** (Stockholm).
-3. **Deep Learning Foundations:** Core PyTorch implementations across Computer Vision, Sequence Modeling, and MLPs.
+A collection of deep learning experiments, NLP hackathon pipelines, AI security attacks, and automata learning research.
 
 ---
 
-## Highlights
+## 🛠️ Core Libraries & Tech Stack
 
-### 1. DFA Extraction from RNNs via Angluin's $L^*$ Algorithm (`dfa-extraction-rnn/`)
-*Presented at the Faculty of Computer Science.*
-
-Recurrent Neural Networks trained on formal languages internalize state-transition dynamics, but their internal representations are continuous and hard to interpret. This project extracts an exact, minimal Deterministic Finite Automaton (DFA) from a trained PyTorch RNN:
-- **Language:** Tomita Grammar 2 — regular expression `(0*11)*0*`.
-- **System Under Learning (SUL):** Wrapped the trained RNN in an active learning oracle using `aalpy`. The oracle runs inference over character sequences and outputs discrete accept/reject decisions.
-- **Active Automata Learning ($L^*$):** Angluin's $L^*$ algorithm iteratively queries the RNN with membership and equivalence queries (using a Random W-Method equivalence oracle) until it constructs the minimal DFA that mirrors the network's classification boundaries.
-- **Artifact:** The extracted automaton visualizes the exact states and transitions the RNN learned.
-
-Check out [`dfa-extraction-rnn/demo.ipynb`](file:///home/raulababei/Desktop/learnai/dfa-extraction-rnn/demo.ipynb) for the full training, SUL wrapper, and extraction pipeline.
+| Category | Libraries / Tools | Used For |
+|---|---|---|
+| **NLP & Transformers** | `transformers`, `datasets`, `evaluate`, `torchcrf` | Fine-tuning RoBERTa, XLM-R, RoGPT2, CRF token classification (NER), text tokenization |
+| **Deep Learning** | `torch`, `torchvision` | Custom RNNs/GRUs, CNNs, MLPs, training loops, model inference |
+| **Automata Learning** | `aalpy` | Active Automata Learning ($L^*$ algorithm, Random W-method, SUL oracle) |
+| **Machine Learning** | `scikit-learn`, `scipy` | TF-IDF vectorization, Ridge, Logistic Regression, K-Fold CV, decision boundary estimation |
+| **Data & Viz** | `pandas`, `numpy`, `matplotlib`, `Pillow` | Data manipulation, ensembling/blending predictions, metrics visualization |
 
 ---
 
-### 2. Trustworthy AI & Dataset Inference (`trustworthy-ai/`)
-*Built for the CISPA Hackathon / European Championship in Trustworthy AI (Stockholm).*
+## 🚀 Projects
 
-Organized by CISPA (Prof. Dr. Adam Dziedzic and Prof. Dr. Franziska Boenisch), this competition focused on real-world AI security, privacy, and data provenance.
+### 1. Nitro NLP Hackathon (`nitronlp/`)
+Competition pipelines and training experiments built for the **Nitro NLP Hackathons** (WAICC 2024 & 2025).
 
-- **Task 1: Dataset Inference Attack on Vision APIs (`01_dataset_inference.ipynb`)**
-  - **Goal:** Determine whether a specific dataset was used to train a target image classifier (ResNet-18) without direct access to the training pipeline.
-  - **Method:** Implemented the **Blind Walk** boundary estimation technique. By progressively adding calibrated Gaussian noise along random vectors until prediction labels flip, we estimate the distance from an input sample to the model's decision boundary. Training samples typically sit deeper inside decision basins and require significantly more perturbation steps to cross the boundary than unseen samples.
-  - Generates membership scores across 1,000 subsets (100 images each) to maximize attack success (`TPR@FPR=0.05`).
-- **Research Papers & Literature (`trustworthy-ai/papers/`):**
-  - Dataset Inference for Vision APIs & Text Attribution (Competition specifications)
-  - *Data Provenance for Image Auto-Regressive Generation* (ICLR 2026, CISPA)
-  - *SoK: Data Reconstruction Attacks Against Machine Learning Models* (USENIX Security 2025, CISPA)
-  - *Adversarial Inputs for Linear Algebra Backends*
-
----
-
-### 3. Deep Learning Foundations
-
-Practical implementations of standard architectures from scratch in PyTorch:
-- **`cnn/`:**
-  - `catvsdog.ipynb`: Custom 3-stage convolutional network for binary classification on the Microsoft Dogs vs. Cats dataset. Includes corrupt image verification and evaluation loops.
-  - `digit_mnist.ipynb`: 2-layer ConvNet with max pooling on MNIST.
-  - `split_data.py`: Script to prepare and shuffle train/test directory splits.
-- **`rnn/`:**
-  - `eminem_rnn_generator.ipynb`: Character-level GRU text generator trained on lyrics, featuring temperature-scaled sampling.
-  - `lyrics_cleaning.ipynb`: Regex preprocessing pipeline to strip metadata, section tags, and noisy headers.
-- **`mlp/`:**
-  - `mnist.ipynb`: 2-hidden-layer feedforward network on MNIST digits.
-  - `fashion_mnist.ipynb`: Multilayer perceptron for Fashion-MNIST clothing classification.
-- **`model_demo.ipynb`:**
-  - Quick interactive notebook loading saved checkpoints for both the character lyric generator and the Tomita-2 grammar classifier.
+* **Libraries:** `transformers`, `datasets`, `evaluate`, `torchcrf`, `torch`, `scikit-learn`, `pandas`
+* **Components:**
+  * **General NLP Pipeline (`nlp_general_pipeline.ipynb`):** Reusable template for text classification — Hugging Face dataset loading, tokenization, transformer fine-tuning, evaluation, and CSV submission export.
+  * **WAICC 2025 (`2025waicc/`):** Romanian NLP competition experiments featuring RoGPT-2 (zero-shot & calibrated), RoBERT, and weighted ensembling / score blending (`merge.py`).
+  * **Nitro NLP 2024 (`2024waicc/`):** Multi-task classification using TF-IDF + Logistic Regression baselines combined with fine-tuned XLM-RoBERTa and model ensembling.
+  * **Practice Tasks (`learning_tasks/`):**
+    * `ronec-tokenclassification.ipynb`: Named Entity Recognition (NER) on Romanian RONEC dataset using RoBERT + linear CRF (`torchcrf`).
+    * `commonlitreadabilityprize.ipynb`: Text readability regression blending RoBERTa-base and TF-IDF + Ridge with K-Fold cross-validation.
+    * `disastertweets.ipynb`: Disaster tweet classification baseline.
 
 ---
 
-## Repository Structure
+### 2. DFA Extraction from RNNs (`dfa-extraction-rnn/`)
+Extracting exact, minimal Deterministic Finite Automata (DFAs) from continuous PyTorch RNNs.
+
+* **Libraries:** `aalpy`, `torch`
+* **Approach:**
+  * Train a PyTorch RNN on regular languages (Tomita Grammar 2: `(0*11)*0*`).
+  * Wrap the RNN inside an `aalpy` System Under Learning (SUL) oracle.
+  * Run Angluin's $L^*$ active learning algorithm with Random W-method equivalence queries to extract and visualize the learned DFA.
+* **Notebook:** [`dfa-extraction-rnn/demo.ipynb`](dfa-extraction-rnn/demo.ipynb)
+
+---
+
+### 3. Trustworthy AI & Dataset Inference (`trustworthy-ai/`)
+Membership inference and dataset provenance attacks, developed for the **CISPA European Championship in Trustworthy AI** (Stockholm).
+
+* **Libraries:** `torch`, `torchvision`, `numpy`, `scipy`
+* **Approach:**
+  * **Blind Walk Attack (`01_dataset_inference.ipynb`):** Estimates distance to the decision boundary of a black-box ResNet-18 vision model by adding calibrated Gaussian noise along random vectors until prediction flips.
+  * Generates membership scores across 1,000 subsets to verify whether data was part of the training set (`TPR@FPR=0.05`).
+  * Includes literature notes and competition specs in `trustworthy-ai/papers/`.
+
+---
+
+### 4. Deep Learning Foundations (`cnn/`, `rnn/`, `mlp/`)
+Fundamental PyTorch implementations from scratch:
+
+* **Libraries:** `torch`, `torchvision`, `Pillow`
+* **`cnn/`:** Dogs vs. Cats image classifier (`catvsdog.ipynb`) and MNIST ConvNet (`digit_mnist.ipynb`).
+* **`rnn/`:** Character-level GRU lyric generator with temperature sampling (`eminem_rnn_generator.ipynb`) + regex lyrics preprocessor (`lyrics_cleaning.ipynb`).
+* **`mlp/`:** Standard feedforward neural nets on MNIST and Fashion-MNIST.
+* **`model_demo.ipynb`:** Quick interactive notebook loading saved checkpoints for both the character lyric generator and the Tomita-2 grammar classifier.
+
+---
+
+## 📁 Repository Structure
 
 ```text
 .
-├── README.md
-├── requirements.txt
-├── model_demo.ipynb                  # Interactive demo for trained models
+├── nitronlp/                         # Nitro NLP Hackathon & practice pipelines
+│   ├── nlp_general_pipeline.ipynb    # Fast HF prototyping template
+│   ├── 2025waicc/                    # WAICC 2025: RoGPT2, RoBERT, ensemble scripts
+│   ├── 2024waicc/                    # Nitro NLP 2024: XLM-R, TF-IDF + LR blending
+│   └── learning_tasks/               # Romanian NER (RONEC + CRF), CommonLit, Tweets
 │
-├── dfa-extraction-rnn/               # Research: Automata extraction from RNNs
+├── dfa-extraction-rnn/               # Active Automata Learning from RNNs
 │   └── demo.ipynb                    # PyTorch RNN + AALpy L* extraction
 │
 ├── trustworthy-ai/                   # CISPA European Championship in Trustworthy AI
 │   ├── 01_dataset_inference.ipynb    # Blind-walk decision boundary attack
-│   └── papers/                       # Challenge briefs & related security papers
+│   └── papers/                       # Challenge papers & specs
 │
-├── cnn/                              # Convolutional Neural Networks
-│   ├── catvsdog.ipynb                # Dogs vs. Cats classifier
-│   ├── digit_mnist.ipynb             # MNIST CNN
-│   └── split_data.py                 # Dataset train/test splitting utility
-│
-├── rnn/                              # Recurrent Neural Networks
-│   ├── eminem_rnn_generator.ipynb    # Char-level GRU lyric generator
-│   └── lyrics_cleaning.ipynb         # Lyrics dataset preprocessing
-│
-└── mlp/                              # Multilayer Perceptrons
-    ├── mnist.ipynb                   # MNIST MLP
-    └── fashion_mnist.ipynb           # Fashion-MNIST MLP
+├── cnn/                              # CNNs (Dogs vs. Cats, MNIST)
+├── rnn/                              # Character-level GRU generator & cleaning
+├── mlp/                              # MLPs (MNIST, Fashion-MNIST)
+├── model_demo.ipynb                  # Checkpoint demo notebook
+└── requirements.txt                  # Python dependencies
 ```
 
 ---
 
-## Setup & Running Locally
+## ⚡ Quickstart
 
-1. **Clone the repository:**
+1. **Clone & enter repo:**
    ```bash
    git clone https://github.com/costitza/learnai.git
    cd learnai
    ```
 
-2. **Create and activate a virtual environment (recommended):**
+2. **Environment & dependencies:**
    ```bash
    python3 -m venv venv
-   source venv/bin/activate    # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
-4. **Launch Jupyter:**
+3. **Launch Jupyter:**
    ```bash
    jupyter notebook
    ```
-
----
-
-## Tech Stack & Tools
-
-- **Frameworks:** PyTorch, Torchvision
-- **Automata & Formal Learning:** AALpy (Active Automata Learning for Python)
-- **Data & Visualization:** NumPy, Pandas, Matplotlib, Pillow
-- **Environment:** Jupyter Notebooks, Python 3.10+
